@@ -50,6 +50,8 @@ Jika Anda sudah menerima invitasi dari saya, tingal lakukan langkah-langkahnya b
 
 ![Screenshot-6](https://dl.dropboxusercontent.com/u/25906777/Screenshot%20-%205.png)
 
+- Selesai! Tentu saja Anda bisa terus input data di baris berikutnya kalau masih mau. :)
+
 [Hanya Untuk Developer] Cara Instalasi dan Penggunaan Aplikasi
 ----
 

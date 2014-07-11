@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
+require 'spreadsheet'
 
 desc "Fetch all TPS data"
 
@@ -11,48 +12,28 @@ task :fetch_provinces => :environment do
 end
 
 task :generate_excel, :province_id do |t, args|
+  book = Spreadsheet::Workbook.new
+  sheet1 = book.create_worksheet
+  row = sheet1.row(0)
+  row.push "Kabupaten/Kota", "Kecamatan", "Kelurahan/Desa", "Nomor TPS", "ID TPS", "Scan 1", "Scan 2", "Scan 3", "Scan 4", "Jumlah Suara Prabowo-Hatta", "Jumlah Suara Jokowi-JK"
+
+  i = 1
   @districts = get_districts(args[:province_id])
   @districts.each do |district|
-    puts "Kabupaten/Kota " + district[:name]
     @subdistricts = get_subdistricts(args[:province_id], district[:id])
     @subdistricts.each do |subdistrict|
-      puts "Kecamatan " + subdistrict[:name]
       @villages = get_villages(district[:id], subdistrict[:id])
       @villages.each do |village|
-        puts "Kelurahan " + village[:name]
         @tpses = get_tpses(subdistrict[:id], village[:id])
         @tpses.each do |tps|
-          puts "Kabupaten " + district[:name] + " - Kecamatan " + subdistrict[:name] + " Keluarahan - " + village[:name] + " - TPS " + tps[:tps_number] + "-" + tps[:tps_id]
+          sheet1.row(i).push district[:name], subdistrict[:name], village[:name], tps[:tps_number], tps[:tps_id], tps[:scan1], tps[:scan2], tps[:scan3], tps[:scan4]
+          i = i+1
         end
       end
     end
   end
-end
 
-task :fetch_districts, :province_id do |t, args|
-  @districts = get_districts(args[:province_id])
-  @districts.each do |district|
-    puts "Kode: " + district[:id] + ", " + district[:name]
-  end
-end
-
-task :fetch_tps => :environment do
-  @provinces = get_provinces
-  @provinces.each do |province|
-    @districts = get_districts(province[:id])
-    @districts.each do |district|
-      @subdistricts = get_subdistricts(province[:id], district[:id])
-      @subdistricts.each do |subdistrict|
-        @villages = get_villages(district[:id], subdistrict[:id])
-        @villages.each do |village|
-          @tpses = get_tpses(subdistrict[:id], village[:id])
-          @tpses.each do |tps|
-            puts tps
-          end
-        end
-      end
-    end
-  end
+  book.write 'Test.xls'
 end
 
 def get_provinces
@@ -61,7 +42,7 @@ def get_provinces
   @provinces = []
 
   doc.xpath('//select[@class="formfield"]/option').each do |node|
-    @provinces << {:id => node['value'], :name => node.text} unless node.txt == "pilih"
+    @provinces << {:id => node['value'], :name => node.text} unless node.text == "pilih"
   end
 
   return @provinces

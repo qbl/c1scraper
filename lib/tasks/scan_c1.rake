@@ -1,53 +1,111 @@
-desc "Fetch all TPS data"
-task :fetch_tps => :environment do |tps|
-  require 'nokogiri'
-  require 'open-uri'
+require 'nokogiri'
+require 'open-uri'
 
-  # National Level
+desc "Fetch all TPS data"
+
+task :fetch_provinces => :environment do
+  @provinces = get_provinces
+  @provinces.each do |province|
+    puts "Kode: " + province[:id] + ", " + province[:name]
+  end
+end
+
+task :generate_excel, :province_id do |t, args|
+  @districts = get_districts(args[:province_id])
+  @districts.each do |district|
+    puts "Kabupaten/Kota " + district[:name]
+    @subdistricts = get_subdistricts(args[:province_id], district[:id])
+    @subdistricts.each do |subdistrict|
+      puts "Kecamatan " + subdistrict[:name]
+      @villages = get_villages(district[:id], subdistrict[:id])
+      @villages.each do |village|
+        puts "Kelurahan " + village[:name]
+        @tpses = get_tpses(subdistrict[:id], village[:id])
+        @tpses.each do |tps|
+          puts "Kabupaten " + district[:name] + " - Kecamatan " + subdistrict[:name] + " Keluarahan - " + village[:name] + " - TPS " + tps[:tps_number] + "-" + tps[:tps_id]
+        end
+      end
+    end
+  end
+end
+
+task :fetch_districts, :province_id do |t, args|
+  @districts = get_districts(args[:province_id])
+  @districts.each do |district|
+    puts "Kode: " + district[:id] + ", " + district[:name]
+  end
+end
+
+task :fetch_tps => :environment do
+  @provinces = get_provinces
+  @provinces.each do |province|
+    @districts = get_districts(province[:id])
+    @districts.each do |district|
+      @subdistricts = get_subdistricts(province[:id], district[:id])
+      @subdistricts.each do |subdistrict|
+        @villages = get_villages(district[:id], subdistrict[:id])
+        @villages.each do |village|
+          @tpses = get_tpses(subdistrict[:id], village[:id])
+          @tpses.each do |tps|
+            puts tps
+          end
+        end
+      end
+    end
+  end
+end
+
+def get_provinces
   url = "http://pilpres2014.kpu.go.id/c1.php"
   doc = Nokogiri::HTML(open(url))
-  puts doc.at_css("title").text
-  doc.xpath('//select[@class="formfield"]/option').each do | node|
-    puts "kode = " + node['value'] + ", nama = " + node.text
+  @provinces = []
+
+  doc.xpath('//select[@class="formfield"]/option').each do |node|
+    @provinces << {:id => node['value'], :name => node.text} unless node.txt == "pilih"
   end
 
-  puts ""
+  return @provinces
+end
 
+def get_districts(province_id)
+  districts_url = "http://pilpres2014.kpu.go.id/c1.php?cmd=select&grandparent=0&parent=#{province_id}"
+  districts_doc = Nokogiri::HTML(open(districts_url))
+  @districts = []
 
-  # Province Level
-  url = "http://pilpres2014.kpu.go.id/c1.php?cmd=select&grandparent=0&parent=6728"
-  doc = Nokogiri::HTML(open(url))
-  puts "Provinsi Sumatera Utara"
-  doc.xpath('//select[@class="formfield"]/option').each do | node|
-    puts "kode = " + node['value'] + ", nama = " + node.text
+  districts_doc.xpath('//select[@class="formfield"]/option').each do |node|
+    @districts << {:id => node['value'], :name => node.text} unless node.text == "pilih"
   end
 
-  puts ""
+  return @districts
+end
 
-  # District Level
-  url = "http://pilpres2014.kpu.go.id/c1.php?cmd=select&grandparent=6728&parent=7240"
-  doc = Nokogiri::HTML(open(url))
-  puts "Kabupaten Tapanuli Tengah"
-  doc.xpath('//select[@class="formfield"]/option').each do | node|
-    puts "kode = " + node['value'] + ", nama = " + node.text
+def get_subdistricts(province_id, district_id)
+  subdistricts_url = "http://pilpres2014.kpu.go.id/c1.php?cmd=select&grandparent=#{province_id}&parent=#{district_id}"
+  subdistricts_doc = Nokogiri::HTML(open(subdistricts_url))
+  @subdistricts = []
+  subdistricts_doc.xpath('//select[@class="formfield"]/option').each do | node|
+    @subdistricts << {:id => node['value'], :name => node.text} unless node.text == "pilih"
   end
 
-  puts ""
+  return @subdistricts
+end
 
-  # Subdistrict Level
-  url = "http://pilpres2014.kpu.go.id/c1.php?cmd=select&grandparent=7240&parent=7241"
-  doc = Nokogiri::HTML(open(url))
-  puts "Kecamatan Barus"
-  doc.xpath('//select[@class="formfield"]/option').each do | node|
-    puts "kode = " + node['value'] + ", nama = " + node.text
+def get_villages(district_id, subdistrict_id)
+  villages_url = "http://pilpres2014.kpu.go.id/c1.php?cmd=select&grandparent=#{district_id}&parent=#{subdistrict_id}"
+  villages_doc = Nokogiri::HTML(open(villages_url))
+  @villages = []
+  villages_doc.xpath('//select[@class="formfield"]/option').each do | node|
+    @villages << {:id => node['value'], :name => node.text} unless node.text == "pilih"
   end
 
-  puts ""
+  return @villages
+end
 
-  # Village Level
-  url = "http://pilpres2014.kpu.go.id/c1.php?cmd=select&grandparent=7241&parent=7242"
-  doc = Nokogiri::HTML(open(url))
-  puts "Kelurahan Pasar Batu Gerigis"
+def get_tpses(subdistrict_id, village_id)
+  tpses_url = "http://pilpres2014.kpu.go.id/c1.php?cmd=select&grandparent=#{subdistrict_id}&parent=#{village_id}"
+  tpses_doc = Nokogiri::HTML(open(tpses_url))
+  @tpses = []
+
   i = 0
   tps_number = ""
   tps_id = ""
@@ -55,8 +113,8 @@ task :fetch_tps => :environment do |tps|
   path_to_scan2 = ""
   path_to_scan3 = ""
   path_to_scan4 = ""
-  doc.xpath('//td').each do |node|
-    # Iterating through table of TPS, ignoring the first "td" tag found because it was an empty cell above the table
+  tpses_doc.xpath('//td').each do |node|
+    # Iterating through table of TPS, ignoring the first "td" tag found because it is an empty cell above the table
     # Each row of the TPS table contains 7 cells
     case i
     when 1
@@ -101,11 +159,13 @@ task :fetch_tps => :environment do |tps|
       else
         path_to_scan4 = "No image uploaded yet at " + Time.now.to_s
       end
-      puts "Nomor TPS = " + tps_number + ", ID TPS = " + tps_id + ", File 1 = " + path_to_scan1 + ", File 2 = " + path_to_scan2 + ", File 3 = " + path_to_scan3 + ", File 4 = " + path_to_scan4
+      @tpses << {:tps_number => tps_number, :tps_id => tps_id, :scan1 => path_to_scan1, :scan2 => path_to_scan2, :scan3 => path_to_scan3, :scan4 => path_to_scan4}
     when 7
       # Cell #7 contains link to download all the scan images (4 images above) in one zip file, ignored in this app
       i = 0
     end
     i = i+1
   end
+
+  return @tpses
 end

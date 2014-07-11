@@ -33,7 +33,7 @@ task :generate_excel, :province_id do |t, args|
     end
   end
 
-  book.write 'Test.xls'
+  book.write "#{args[:province_id]}.xls"
 end
 
 def get_provinces

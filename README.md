@@ -11,17 +11,46 @@ Aplikasi ini merupakan aplikasi yang dibuat untuk membantu melakukan scraping da
   - ID TPS
   - Link ke 4 file hasil scan dari dokumen C1
 
-Kolaborasi untuk Rekapitulasi C1
+Bagaimana Kalau Saya Ingin Ikut Menginput Data Rekap C1?
 ----
 
-Hasil dari scraping ini sudah diunggah sebagai Google Spreadsheet pada folder [ini][3] untuk kemudian bisa diisi secara kolaboratif. Jika Anda tertarik untuk bisa ikut mengedit dokumen-dokumen Google Spreadsheet tersebut, kontak ke:
+Caranya mudah, Anda cukup memiliki akun Gmail saja. Informasikan akun alamat email Anda ke saya melalui:
 
   - email ke farabi.iqbal@gmail.com
   - akun twitter [@iqbal_farabi][2]
 
-Berikan informasi akun Gmail yang bisa digunakan untuk mengedit serta paling tidak salah satu dari akun Twitter atau Facebook Anda. Meski pada bagian "Disclaimer" saya sampaikan bahwa saya tidak bertanggung jawab terhadap akurasi data karena dokumen Google Spreadsheet tadi diedit secara bersama-sama, saya tetap perlu menyaring siapa saja yang boleh mengeditnya. Insya Allah saya tidak akan membeda-bedakan apakah Anda pendukung pasangan capres-cawapres #1 atau pasangan capres-cawapres #2. Selain itu, cukup penting juga bagi siapa saja yang melihat untuk mengetahui siapa saja yang mengedit dokumen tersebut.
+Nanti saya akan invite Anda untuk bisa menginput data di dokumen-dokumen Google Spreadsheet yang sudah berisi data-data dari situs KPU tadi.
 
-Cara Instalasi dan Penggunaan Aplikasi
+Jika Anda sudah menerima invitasi dari saya, tingal lakukan langkah-langkahnya berikut:
+- Buka link [berikut][3]
+
+![Screenshot-1](https://dl.dropboxusercontent.com/u/25906777/Screenshot%20-%201.png)
+
+- Klik satu file yang ingin Anda edit kemudian klik tombol "Open"
+
+![Screenshot-2](https://dl.dropboxusercontent.com/u/25906777/Screenshot%20-%202.png)
+
+- Setelah dokumen terbuka, lihat kolom yang paling kanan
+
+![Screenshot-3](https://dl.dropboxusercontent.com/u/25906777/Screenshot%20-%203.png)
+
+- Copy URL pada kolom Scan4 
+
+![Screenshot-4](https://dl.dropboxusercontent.com/u/25906777/Screenshot%20-%203.png)
+
+- Paste URL tersebut di tab lain
+
+![Screenshot-5](https://dl.dropboxusercontent.com/u/25906777/Screenshot%20-%204.png)
+
+- Lihat hasil perhitungan pada scan dokumen C1 yang muncul
+
+![Screenshot-6](https://dl.dropboxusercontent.com/u/25906777/Screenshot%20-%206.png)
+
+- Inputkan hasil perhitungan tersebut ke dokumen Google Spreadsheet tadi
+
+![Screenshot-6](https://dl.dropboxusercontent.com/u/25906777/Screenshot%20-%205.png)
+
+[Hanya Untuk Developer] Cara Instalasi dan Penggunaan Aplikasi
 ----
 
 Sebelum melakukan instalasi, pastikan Anda sudah memiliki requirement berikut:

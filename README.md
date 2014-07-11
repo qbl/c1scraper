@@ -55,6 +55,8 @@ Jika Anda sudah menerima invitasi dari saya, tingal lakukan langkah-langkahnya b
 [Hanya Untuk Developer] Cara Instalasi dan Penggunaan Aplikasi
 ----
 
+Bagian ini hanya untuk developer/programmer yang tertarik untuk a) Ikut menjalankan aplikasi untuk meng-generater file excel atau b) Ingin memeriksa apakah script ini berjalan baik atau tidak. Jika Anda bukan developer/programmer, bagian ini tidak perlu dibaca.
+
 Sebelum melakukan instalasi, pastikan Anda sudah memiliki requirement berikut:
 
   - Sistem operasi berbasis Unix

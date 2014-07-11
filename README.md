@@ -68,7 +68,7 @@ Untuk meng-install aplikasi, ikuti langkah-langkah berikut.
   - Pada command line, Ketikkan perintah 
 
 ```sh
-git clone git@github.com:qbl/c1scraper.git
+git clone https://github.com/qbl/c1scraper.git
 cd c1scrapper
 bundle install
 ```
